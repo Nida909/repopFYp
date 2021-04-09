@@ -5,12 +5,17 @@ public class history1 {
     String Quantity;
     String orderNo;
     String Price;
+     int count;
+private history1()
+{
 
-    public history1(String nme,String cont,String ord,String prc) {
-        this.name = nme;
-        this.Quantity = cont;
-        this.orderNo=ord;
+}
+    public history1(String name,String quantity,String orderno,String prc) {
+        this.name = name;
+        this.Quantity = quantity;
+        this.orderNo=orderno;
         this.Price=prc;
+        //count++;
     }
     public String getName() {
         return name;
@@ -37,6 +42,14 @@ public class history1 {
     }
     public void setPrice(String pr) {
         this.Price = pr;
+    }
+    public int getCount()
+    {
+        return count;
+    }
+    public void setCount(int num)
+    {
+        count=num;
     }
     @Override
     public String toString()

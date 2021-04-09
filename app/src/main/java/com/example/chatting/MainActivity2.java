@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity2 extends AppCompatActivity {
     Button milkman,customer,owner,rider;
     TextView txt1,txt2;
@@ -70,34 +73,36 @@ public class MainActivity2 extends AppCompatActivity {
         }
 
 
-        milkman.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity2.this, LogInPage.class);
-                intent.putExtra("language",str);
-                startActivity(intent);
-            }
-        });
-
-        customer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-      Intent intent1=new Intent(MainActivity2.this,SignIn.class);
-                intent1.putExtra("language",str);
-      startActivity(intent1);
-
-            }
-        });
 
     }
-    public void Onrider(View v)
+    public void Login(View v)
     {
-        Intent intent=new Intent(MainActivity2.this,RiderSingIn.class);
+        String check;
+        if(v.getId()==R.id.milkman)
+        {
+            check="MilkMan";
+        }
+        else if(v.getId()==R.id.customer)
+        {
+            check="Customer";
+        }
+        else
+        {
+            check="Rider";
+        }
+        Intent intent = new Intent(MainActivity2.this, LogInPage.class);
+
+        intent.putExtra("language",str);
+        intent.putExtra("Check",check);
         startActivity(intent);
     }
     public void Onowner(View v)
     {
-
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference();
+        ref.child("last").setValue("last");
+        Intent intent = new Intent(MainActivity2.this, OwnerMain.class);
+        startActivity(intent);
     }
 
 

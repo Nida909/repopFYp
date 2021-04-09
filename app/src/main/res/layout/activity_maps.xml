@@ -54,8 +54,18 @@
         android:id="@+id/selectRider"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Select Rider"
+        android:text="Continue"
         android:layout_marginBottom="20dp"
-        android:onClick="SelectRider"
+        android:onClick="Continue"
         ></Button>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/selectRider"
+        android:id="@+id/distance"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:padding="10dp"
+        ></TextView>
 </RelativeLayout>

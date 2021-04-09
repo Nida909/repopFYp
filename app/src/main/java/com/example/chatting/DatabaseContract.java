@@ -22,6 +22,7 @@ public class DatabaseContract {
         public static final String COL_QUALITY="Quality";
         public static final String COL_QUANTITY="Quantity";
         public static final String COL_PRICE="Price";
+        public static final String COL_TOTAL_PRICE="TPrice";
 
     }
     public static abstract class Riders implements BaseColumns {
@@ -31,6 +32,7 @@ public class DatabaseContract {
         public static final String COL_LOCATION="Location";
         public static final String COL_EMAIL = "Email";
         public static final String COL_PASSWORD="Password";
+        public static final String COL_TOTAL_PRICE="TPrice";
     }
     public static abstract class OrderT implements BaseColumns {
         public static final String TABLE_NAME = "OrderT";
@@ -39,6 +41,7 @@ public class DatabaseContract {
         public static final String COL_QUANTITY="Quantity";
         public static final String COL_QUALITY="Quality";
         public static final String COL_PRICE="Price";
+        public static final String COL_STATUS="Status";
 
     }
     public static abstract class Review implements BaseColumns {

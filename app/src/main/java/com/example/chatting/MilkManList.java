@@ -152,35 +152,6 @@ ImageButton img;
         }
 
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main1, menu);
-        return true;
-
-
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.Ordersh:
-                Toast.makeText(getApplicationContext(),"Record id"+str,Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, CustomerHistory.class);
-                intent.putExtra("var", str);
-                startActivity(intent);
-                return true;
-            case R.id.Chat:
-
-                Intent inten = new Intent(this, PhoneNumberActivity.class);
-                //inten.putExtra("var", str);
-                startActivity(inten);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-
-
-        }
-    }
    /* public void Onsearch(View v)
     {
         db = dbh.getReadableDatabase();

@@ -9,13 +9,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class history2 extends BaseAdapter {
-
+public class histories extends BaseAdapter {
     private Activity context;
     ArrayList<history1> customer;
 
 
-    public history2(Activity context, ArrayList cust) {
+    public histories(Activity context, ArrayList cust) {
         // super(context, R.layout.row_item, countries);
         this.context = context;
         this.customer=cust;
@@ -31,7 +30,7 @@ public class history2 extends BaseAdapter {
         View row=convertView;
 
         LayoutInflater inflater = context.getLayoutInflater();
-       ViewHolder vh;
+        ViewHolder vh;
         if(convertView==null) {
             vh=new ViewHolder();
             row = inflater.inflate(R.layout.activity_history2, null, true);
@@ -46,10 +45,10 @@ public class history2 extends BaseAdapter {
             vh = (ViewHolder) convertView.getTag();
         }
 
-        vh.txt2.setText(""+customer.get(position).getName());
-        vh.txt1.setText(""+customer.get(position).getOrderNo());
-        vh.txt3.setText(""+customer.get(position).getQuantity());
-        vh.txt4.setText(""+customer.get(position).getPrice());
+        vh.txt2.setText("Your Contact :"+customer.get(position).getName());
+        vh.txt1.setText("Price :"+customer.get(position).getOrderNo());
+        vh.txt3.setText("Pick Up Location :"+customer.get(position).getQuantity());
+        vh.txt4.setText("Drop Off Location :"+customer.get(position).getPrice());
         return  row;
     }
 

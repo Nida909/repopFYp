@@ -1,4 +1,4 @@
-package com.example.chatting;
+ package com.example.chatting;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -32,8 +33,12 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -55,8 +60,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Polyline polyline2;
     PolylineOptions pp;
     String str;
+    String count;
     DatabaseHelper dbHelper;
     SQLiteDatabase db;
+    Double distance;
+    static int counter;
+    boolean b=false;
+    FirebaseDatabase datab;
+    DatabaseReference ref;
+    TextView distn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +81,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         milkman=intent.getStringExtra("milkman");
         customer=intent.getStringExtra("customer");
         milkmanLoc=intent.getStringExtra("milkmanL");
+        datab = FirebaseDatabase.getInstance();
+         ref = datab.getReference();
+        ref.child("copy").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                counter=Integer.parseInt(snapshot.child("Count").getValue().toString());
+                b=true;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        distn=(TextView)findViewById(R.id.distance);
         client = LocationServices.getFusedLocationProviderClient(this);
         //permissions check ho rahey hain
         if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -98,9 +125,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     Address address=addressList.get(0);
                     latLng2=new LatLng(address.getLatitude(),address.getLongitude());
+                    distance = SphericalUtil.computeDistanceBetween(latLng1, latLng2);
+                    distance=(distance/1000);//km
                     map.addMarker(new MarkerOptions().position(latLng2).title("Your Drop Off Location"));
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng2,10));
                pp=new PolylineOptions().clickable(true).add(latLng1,latLng2);
+               distn.setText("Distance to DropOff is "+distance+"Km");
                     polyline2=map.addPolyline(pp);
                 }
             }
@@ -115,7 +145,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             List<Address> addressList1=null;
             Geocoder geocoder=new Geocoder(MapsActivity.this);
             try {
-                addressList1=geocoder.getFromLocationName("Islamabad",1);
+                addressList1=geocoder.getFromLocationName(milkmanLoc,1);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -156,6 +186,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng3,10));
                             googleMap.addMarker(options);
                             polyline1=googleMap.addPolyline(new PolylineOptions().clickable(true).add(latLng1,latLng3));
+                            distn.setText("Distance to current location: "+SphericalUtil.computeDistanceBetween(latLng1, latLng3)+"Km");
                         }
                     });
             }
@@ -173,8 +204,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void SelectRider(View v)
+    public void Continue(View v)
     {
+
+
+        counter=counter+1;
+        count=String.valueOf(counter);
+ref.child("check").setValue(b);
         db = dbHelper.getReadableDatabase();
         String[] colm={DatabaseContract.Customers.COL_NAME,DatabaseContract.Customers.COL_CONTACT};
         Cursor c = db.query(DatabaseContract.Customers.TABLE_NAME,colm, DatabaseContract.Customers._ID + "=?", new String[] {customer}
@@ -185,20 +221,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         c.moveToFirst();
        String s1=c.getString(0);
         String s2=c.getString(1);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("Orderlocation").child("Location");
+       // FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //DatabaseReference reff = database.getReference();
 
 
         Map<String, Object> data = new HashMap<>();
+        data.put("ID",count);
         data.put("MilkmanLoc", milkmanLoc);
         data.put("DropOffLoc", str);
         data.put("CustomerName",s1);
         data.put("CustomerContact",s2);
-        ref.setValue(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+        data.put("Cancel","Unknown");
+        //data.put("Cancel","Unknown");
+        ref.child("Orderlocation").child(count).setValue(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 //
                 Log.i("tag", "Location update saved");
+                Intent intn=new Intent(MapsActivity.this,OrderPage.class);
+                intn.putExtra("milkman",milkman);
+                intn.putExtra("customer",customer);
+                intn.putExtra("Distance",distance );
+                intn.putExtra("PickUp",milkmanLoc);
+                intn.putExtra("DropOff",str);
+                intn.putExtra("Count", String.valueOf(counter));
+                startActivity(intn);
             }
         });
     }

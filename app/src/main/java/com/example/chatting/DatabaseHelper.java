@@ -14,6 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + DatabaseContract.Customers.COL_CONTACT + " TEXT,"
             + DatabaseContract.Customers.COL_LOCATION + " TEXT,"
             + DatabaseContract.Customers.COL_EMAIL + " TEXT,"
+
             + DatabaseContract.Customers.COL_PASSWORD+ " TEXT )";
     private static final String CREATE_TBL_USERS1 = "CREATE TABLE "
             + DatabaseContract.MilkMan.TABLE_NAME + " ("
@@ -25,6 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + DatabaseContract.MilkMan.COL_PASSWORD+ " TEXT,"
             + DatabaseContract.MilkMan.COL_QUALITY+ " TEXT,"
             + DatabaseContract.MilkMan.COL_QUANTITY+ " INTEGER,"
+            + DatabaseContract.MilkMan.COL_TOTAL_PRICE + " INTEGER,"
             + DatabaseContract.MilkMan.COL_PRICE+ " INTEGER)";
 
     private static final String CREATE_TBL_USERS3 = "CREATE TABLE "
@@ -34,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + DatabaseContract.OrderT.COL_PLACED_TO + " INTEGER,"
             + DatabaseContract.OrderT.COL_QUANTITY+ " INTEGER,"
             +DatabaseContract.OrderT.COL_QUALITY+ " TEXT,"
+            +DatabaseContract.OrderT.COL_STATUS+ " TEXT,"
             + DatabaseContract.OrderT.COL_PRICE+ " INTEGER)";
 
     private static final String CREATE_TBL_USERS4 = "CREATE TABLE "
@@ -49,6 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + DatabaseContract.Riders.COL_CONTACT + " TEXT,"
             + DatabaseContract.Riders.COL_LOCATION + " TEXT,"
             + DatabaseContract.Riders.COL_EMAIL + " TEXT,"
+            + DatabaseContract.Riders.COL_TOTAL_PRICE + " INTEGER,"
             + DatabaseContract.Riders.COL_PASSWORD+ " TEXT )";
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
